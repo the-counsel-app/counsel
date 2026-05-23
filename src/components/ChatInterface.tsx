@@ -43,6 +43,7 @@ export default function ChatInterface() {
   const [ctaError, setCtaError] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const intakeComplete = messages.some(
     (m) => m.role === "assistant" && m.content.includes("[INTAKE_COMPLETE]")
@@ -92,6 +93,7 @@ export default function ChatInterface() {
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     setInput("");
+    inputRef.current?.focus();
     setIsStreaming(true);
 
     const assistantId = crypto.randomUUID();
@@ -246,6 +248,7 @@ export default function ChatInterface() {
           onChange={(e) => setInput(e.target.value)}
           placeholder="Type your response…"
           disabled={intakeComplete}
+          ref={inputRef}
           className="flex-1 bg-navy-light border border-navy-lighter rounded-xl px-4 py-3 text-base text-slate-100 placeholder-slate-500 outline-none focus:border-gold/50 transition-colors disabled:opacity-40"
         />
         <button
