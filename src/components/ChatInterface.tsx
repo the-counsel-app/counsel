@@ -18,6 +18,22 @@ const INITIAL_MESSAGE: ChatMessage = {
     "Hello, I'm the intake specialist at Mitchell & Associates. Everything you share with me today is protected by attorney-client privilege — it cannot be used against you in court. I'm here to help Attorney Mitchell understand your situation. To get started, could you briefly describe what happened to you?",
 };
 
+const FAKE_CONVERSATION: ChatMessage[] = [
+  { id: "f1", role: "assistant", content: "Hello, I'm the intake specialist at Mitchell & Associates. Everything you share with me today is protected by attorney-client privilege. To get started, could you briefly describe what happened to you?" },
+  { id: "f2", role: "user", content: "I was rear-ended at a red light on I-90 in Chicago on March 15th. The other driver hit me pretty hard — airbags went off." },
+  { id: "f3", role: "assistant", content: "I'm so sorry to hear that — that sounds like a frightening experience. Was a police report filed at the scene, and do you have the report number or the other driver's insurance information?" },
+  { id: "f4", role: "user", content: "Yes, police came and filed a report. I have the report number. The other driver's insurance is State Farm." },
+  { id: "f5", role: "assistant", content: "Good, that's helpful. What injuries are you experiencing, and did you notice them right away or did some symptoms appear later?" },
+  { id: "f6", role: "user", content: "My neck and lower back hurt immediately. I also started getting headaches the next day. My right shoulder has been sore too." },
+  { id: "f7", role: "assistant", content: "Did you go to the emergency room or see a doctor after the accident? And are you still receiving treatment?" },
+  { id: "f8", role: "user", content: "I went to the ER the same day. I've been seeing an orthopedic specialist for about 8 weeks now. They're talking about possible surgery on my shoulder." },
+  { id: "f9", role: "assistant", content: "I understand — ongoing treatment is important to document. Have you had any prior injuries to your neck, back, or shoulder, or any previous car accidents or workers' comp claims?" },
+  { id: "f10", role: "user", content: "I had some lower back issues back in 2023 but that had fully resolved. No prior accidents or claims." },
+  { id: "f11", role: "assistant", content: "Thank you for being upfront about that — it's important context. Have you missed any work as a result of your injuries, and do you have a sense of your medical bills so far?" },
+  { id: "f12", role: "user", content: "I missed 2 weeks of work. My employer gave me a letter confirming it. Medical bills are around $18,000 so far and climbing." },
+  { id: "f13", role: "assistant", content: "[INTAKE_COMPLETE] Thank you so much for walking me through everything today. Attorney Mitchell's team will review your case carefully and be in touch soon to discuss next steps. In the meantime, please continue following your doctor's treatment plan and hold onto any bills, records, or correspondence related to the accident. Take care of yourself." },
+];
+
 export default function ChatInterface() {
   const router = useRouter();
   const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_MESSAGE]);
@@ -38,6 +54,12 @@ export default function ChatInterface() {
   async function handleSend(e: React.FormEvent) {
     e.preventDefault();
     if (!input.trim() || isStreaming || intakeComplete) return;
+
+    if (input.trim().toLowerCase() === "gen fake report") {
+      setInput("");
+      setMessages(FAKE_CONVERSATION);
+      return;
+    }
 
     const userMessage: ChatMessage = {
       id: crypto.randomUUID(),
