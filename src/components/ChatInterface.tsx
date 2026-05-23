@@ -57,6 +57,7 @@ export default function ChatInterface() {
     if (!vv || !containerRef.current) return;
     containerRef.current.style.height = `${vv.height}px`;
     containerRef.current.style.top = `${vv.offsetTop}px`;
+    bottomRef.current?.scrollIntoView({ behavior: "instant" });
   }, []);
 
   useEffect(() => {
