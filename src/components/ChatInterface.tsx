@@ -175,8 +175,8 @@ export default function ChatInterface() {
       <div className="flex items-center justify-between px-4 py-3 border-b border-navy-lighter">
         <div className="flex items-center gap-2">
           <span className="text-gold font-semibold text-sm tracking-wide">COUNSEL</span>
-          <span className="text-navy-lighter text-sm">·</span>
-          <span className="text-slate-400 text-xs">Mitchell &amp; Associates</span>
+          <span className="text-navy-lighter text-sm hidden sm:inline">·</span>
+          <span className="text-slate-400 text-xs hidden sm:inline">Mitchell &amp; Associates</span>
         </div>
         <PrivacyBadge />
       </div>
