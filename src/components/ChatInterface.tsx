@@ -28,7 +28,7 @@ export default function ChatInterface() {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const intakeComplete = messages.some(
-    (m) => m.role === "assistant" && m.content.startsWith("[INTAKE_COMPLETE]")
+    (m) => m.role === "assistant" && m.content.includes("[INTAKE_COMPLETE]")
   );
 
   useEffect(() => {

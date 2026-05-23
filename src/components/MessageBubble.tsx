@@ -6,7 +6,7 @@ interface MessageBubbleProps {
 export default function MessageBubble({ role, content }: MessageBubbleProps) {
   const isUser = role === "user";
   const displayContent = content
-    .replace(/^\[INTAKE_COMPLETE\]/, "")
+    .replace(/\[INTAKE_COMPLETE\]/, "")
     .trim();
 
   return (
