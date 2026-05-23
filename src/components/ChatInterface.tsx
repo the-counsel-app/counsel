@@ -243,7 +243,7 @@ export default function ChatInterface() {
           onChange={(e) => setInput(e.target.value)}
           placeholder="Type your response…"
           disabled={intakeComplete}
-          className="flex-1 bg-navy-light border border-navy-lighter rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 outline-none focus:border-gold/50 transition-colors disabled:opacity-40"
+          className="flex-1 bg-navy-light border border-navy-lighter rounded-xl px-4 py-3 text-base text-slate-100 placeholder-slate-500 outline-none focus:border-gold/50 transition-colors disabled:opacity-40"
         />
         <button
           type="submit"
