@@ -23,6 +23,10 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     messages = body.messages as ModelMessage[];
+    // Anthropic requires the last message to be from the user
+    while (messages.length > 0 && messages[messages.length - 1].role !== "user") {
+      messages = messages.slice(0, -1);
+    }
   } catch {
     return Response.json({ error: "Invalid request body" }, { status: 400 });
   }
