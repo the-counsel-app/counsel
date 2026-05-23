@@ -150,7 +150,7 @@ export default function ChatInterface() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-navy">
+    <div className="flex flex-col h-dvh bg-navy">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-navy-lighter">
         <div className="flex items-center gap-2">
