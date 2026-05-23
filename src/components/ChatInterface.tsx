@@ -133,7 +133,10 @@ export default function ChatInterface() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: messages.map((m) => ({ role: m.role, content: m.content })),
+          messages: messages.map((m) => ({
+            role: m.role,
+            content: m.content.replace(/\[INTAKE_COMPLETE\]/g, "").trim(),
+          })),
         }),
       });
       const data = await res.json();
