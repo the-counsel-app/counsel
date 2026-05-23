@@ -51,6 +51,7 @@ export async function POST(req: Request) {
       maxOutputTokens: 1024,
     });
     text = result.text;
+    console.log("Summary finishReason:", result.finishReason, "textLength:", text.length);
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error("Summary generation failed:", message);

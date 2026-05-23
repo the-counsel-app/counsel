@@ -45,9 +45,9 @@ export default function ChatInterface() {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const intakeComplete = messages.some(
-    (m) => m.role === "assistant" && m.content.includes("[INTAKE_COMPLETE]")
-  );
+  const intakeComplete =
+    !isStreaming &&
+    messages.some((m) => m.role === "assistant" && m.content.includes("[INTAKE_COMPLETE]"));
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -160,10 +160,12 @@ export default function ChatInterface() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: messages.map((m) => ({
-            role: m.role,
-            content: m.content.replace(/\[INTAKE_COMPLETE\]/g, "").trim(),
-          })),
+          messages: messages
+            .map((m) => ({
+              role: m.role,
+              content: m.content.replace(/\[INTAKE_COMPLETE\]/g, "").trim(),
+            }))
+            .filter((m) => m.content.length > 0),
         }),
       });
       const data = await res.json();
