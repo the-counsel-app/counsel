@@ -1,4 +1,5 @@
 import Link from "next/link";
+import DemoButton from "@/components/DemoButton";
 
 export default function LandingPage() {
   return (
@@ -56,6 +57,7 @@ export default function LandingPage() {
             />
           </svg>
         </Link>
+        <DemoButton />
       </section>
 
       {/* How it works */}

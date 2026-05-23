@@ -24,6 +24,7 @@ export default function ChatInterface() {
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [ctaState, setCtaState] = useState<"idle" | "loading" | "error">("idle");
+  const [ctaError, setCtaError] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const intakeComplete = messages.some(
@@ -113,12 +114,12 @@ export default function ChatInterface() {
           messages: messages.map((m) => ({ role: m.role, content: m.content })),
         }),
       });
-      if (!res.ok) throw new Error("Summary failed");
       const data = await res.json();
-      if (data.error) throw new Error(data.error);
+      if (!res.ok || data.error) throw new Error(data.error ?? `HTTP ${res.status}`);
       sessionStorage.setItem("caseSummary", JSON.stringify(data));
       router.push("/summary");
-    } catch {
+    } catch (err) {
+      setCtaError(err instanceof Error ? err.message : "Unknown error");
       setCtaState("error");
     }
   }
@@ -165,7 +166,7 @@ export default function ChatInterface() {
             </p>
           </div>
           {ctaState === "error" && (
-            <p className="text-xs text-red-400">Something went wrong. Try again.</p>
+            <p className="text-xs text-red-400">Error: {ctaError || "Something went wrong."}</p>
           )}
           <button
             onClick={handleGetEvaluation}
