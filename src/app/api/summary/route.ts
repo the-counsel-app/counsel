@@ -28,7 +28,10 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     messages = body.messages as ModelMessage[];
-    // Anthropic requires the conversation to end with a user message
+    // Anthropic requires conversation to start and end with a user message
+    while (messages.length > 0 && messages[0].role !== "user") {
+      messages = messages.slice(1);
+    }
     while (messages.length > 0 && messages[messages.length - 1].role !== "user") {
       messages = messages.slice(0, -1);
     }
