@@ -162,7 +162,7 @@ export default function ChatInterface() {
           <div className="flex-1">
             <p className="text-sm font-semibold text-gold">Intake Complete</p>
             <p className="text-xs text-slate-400 mt-0.5">
-              Your information has been collected. Generate your confidential case evaluation.
+              Generate your confidential case evaluation.
             </p>
           </div>
           {ctaState === "error" && (
