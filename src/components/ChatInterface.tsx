@@ -53,12 +53,15 @@ export default function ChatInterface() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  const rafRef = useRef<number>(0);
+
   const syncViewport = useCallback(() => {
     const vv = window.visualViewport;
     if (!vv || !containerRef.current) return;
     containerRef.current.style.height = `${vv.height}px`;
     containerRef.current.style.top = `${vv.offsetTop}px`;
-    requestAnimationFrame(() => {
+    cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
       bottomRef.current?.scrollIntoView({ behavior: "instant" });
     });
   }, []);
@@ -67,11 +70,10 @@ export default function ChatInterface() {
     const vv = window.visualViewport;
     if (!vv) return;
     vv.addEventListener("resize", syncViewport);
-    vv.addEventListener("scroll", syncViewport);
     syncViewport();
     return () => {
       vv.removeEventListener("resize", syncViewport);
-      vv.removeEventListener("scroll", syncViewport);
+      cancelAnimationFrame(rafRef.current);
     };
   }, [syncViewport]);
 
