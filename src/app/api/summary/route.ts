@@ -1,34 +1,26 @@
 import { anthropic } from "@ai-sdk/anthropic";
-import { generateText, type ModelMessage } from "ai";
+import { generateObject, type ModelMessage } from "ai";
+import { z } from "zod";
 
 export const maxDuration = 60;
 
-const SUMMARY_SYSTEM = `You are a legal case analyst. Your only job is to output a single JSON object — nothing else. No explanation, no markdown, no preamble, no text after the JSON.
+const summarySchema = z.object({
+  incidentSummary: z.string().describe("2-3 sentence summary of what happened"),
+  injuriesClaimed: z.array(z.string()).min(1).describe("List each injury mentioned"),
+  liabilityExposure: z.enum(["Low", "Medium", "High"]),
+  credibilityRating: z.number().int().min(1).max(10),
+  caseStrengths: z.array(z.string()).min(1),
+  caseWeaknesses: z.array(z.string()).min(1),
+  recommendation: z.string().describe("1-2 sentence recommendation for the attorney"),
+});
 
-Analyze the intake conversation and fill in every field:
-
-{
-  "incidentSummary": "2-3 sentence summary of what happened",
-  "injuriesClaimed": ["list each injury mentioned"],
-  "liabilityExposure": "Low",
-  "credibilityRating": 7,
-  "caseStrengths": ["list strengths"],
-  "caseWeaknesses": ["list weaknesses or unknowns"],
-  "recommendation": "1-2 sentence recommendation"
-}
-
-Rules:
-- liabilityExposure must be exactly "Low", "Medium", or "High"
-- credibilityRating must be a number 1-10
-- All arrays must have at least one item
-- Output the raw JSON object only — first character must be { and last must be }`;
+const SUMMARY_SYSTEM = `You are a legal case analyst reviewing a personal injury intake conversation. Analyze the conversation and provide a structured case evaluation.`;
 
 export async function POST(req: Request) {
   let messages: ModelMessage[];
   try {
     const body = await req.json();
     messages = body.messages as ModelMessage[];
-    // Anthropic requires conversation to start and end with a user message
     while (messages.length > 0 && messages[0].role !== "user") {
       messages = messages.slice(1);
     }
@@ -42,43 +34,20 @@ export async function POST(req: Request) {
     return Response.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  let text: string;
   try {
-    const result = await generateText({
+    const { object } = await generateObject({
       model: anthropic("claude-sonnet-4-6"),
       system: SUMMARY_SYSTEM,
       messages,
+      schema: summarySchema,
       maxOutputTokens: 1024,
     });
-    text = result.text;
-    console.log("Summary finishReason:", result.finishReason, "textLength:", text.length);
+    return Response.json(object);
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error("Summary generation failed:", message);
     return Response.json(
-      { error: `AI request failed: ${message}` },
-      { status: 500 }
-    );
-  }
-
-  console.log("Summary raw response (first 300):", text.slice(0, 300));
-
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) {
-    console.error("No JSON found in response:", text.slice(0, 300));
-    return Response.json(
       { error: `Failed to generate summary. Please try again.` },
-      { status: 500 }
-    );
-  }
-
-  try {
-    const summary = JSON.parse(jsonMatch[0]);
-    return Response.json(summary);
-  } catch {
-    console.error("JSON parse failed:", jsonMatch[0].slice(0, 300));
-    return Response.json(
-      { error: "Failed to parse summary. Please try again." },
       { status: 500 }
     );
   }
