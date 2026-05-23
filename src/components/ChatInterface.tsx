@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import MessageBubble from "./MessageBubble";
 import PrivacyBadge from "./PrivacyBadge";
@@ -42,6 +42,7 @@ export default function ChatInterface() {
   const [ctaState, setCtaState] = useState<"idle" | "loading" | "error">("idle");
   const [ctaError, setCtaError] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const intakeComplete = messages.some(
     (m) => m.role === "assistant" && m.content.includes("[INTAKE_COMPLETE]")
@@ -50,6 +51,25 @@ export default function ChatInterface() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const syncViewport = useCallback(() => {
+    const vv = window.visualViewport;
+    if (!vv || !containerRef.current) return;
+    containerRef.current.style.height = `${vv.height}px`;
+    containerRef.current.style.top = `${vv.offsetTop}px`;
+  }, []);
+
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    vv.addEventListener("resize", syncViewport);
+    vv.addEventListener("scroll", syncViewport);
+    syncViewport();
+    return () => {
+      vv.removeEventListener("resize", syncViewport);
+      vv.removeEventListener("scroll", syncViewport);
+    };
+  }, [syncViewport]);
 
   async function handleSend(e: React.FormEvent) {
     e.preventDefault();
@@ -150,7 +170,7 @@ export default function ChatInterface() {
   }
 
   return (
-    <div className="flex flex-col h-dvh bg-navy">
+    <div ref={containerRef} className="flex flex-col bg-navy fixed inset-x-0 top-0" style={{ height: "100dvh" }}>
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-navy-lighter">
         <div className="flex items-center gap-2">
