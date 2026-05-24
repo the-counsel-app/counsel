@@ -58,6 +58,28 @@ Do not replace this with `useChat`.
 
 Typing `gen fake report` in the chat input replaces the conversation with a pre-scripted fake case (rear-end accident on I-90, $18k bills, possible shoulder surgery) to demo the full flow without running a real AI conversation.
 
+## Business context
+
+Co-founder docs live in `docs/`:
+- `docs/strategy.txt` — marketplace vs. firm-embedded SaaS decision; narrow focus (NYC, plaintiff, car accidents); pilot structure
+- `docs/risks.txt` — legal risks: privilege claim, UPL, referral fee prohibition, data security
+- `docs/ideas.txt` — product feature ideas: case packet, evidence collection, voice input, deposition prep
+- `docs/todo.txt` — prioritized next steps (co-founder attorney question is #1; legal ethics opinion is #3)
+
+**For coding decisions:** The target output is a formatted *case packet*, not just a referral button. The `/summary` and `/referral` pages should eventually produce a printable attorney-ready case file. One co-founder is a licensed attorney — the firm-embedded SaaS structure (intake hosted on the law firm's site) is the likely legal architecture, not a consumer marketplace.
+
+## Keeping docs/ up to date
+
+**After any conversation that surfaces new risks, ideas, or strategic decisions:** update the relevant file(s) in `docs/` to capture the new information before the session ends.
+
+**After any coding change that completes a todo item:** remove or mark that item done in `docs/todo.txt`. If the work also reveals something new (a constraint, a decision made, a risk encountered), add it to the appropriate doc.
+
+**When to update each file:**
+- `docs/risks.txt` — new legal, technical, or business risks surface; existing risks are resolved or change severity
+- `docs/ideas.txt` — new feature ideas discussed; ideas are ruled out with a reason worth remembering
+- `docs/strategy.txt` — a strategic decision is made or changed (e.g., marketplace vs. SaaS resolved, target geography locked)
+- `docs/todo.txt` — a task is completed via code or confirmed done by the user; a new blocking dependency is discovered; priority order changes
+
 ## Dev
 
 ```bash
