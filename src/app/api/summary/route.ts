@@ -11,6 +11,7 @@ const summarySchema = z.object({
   credibilityRating: z.number().int().min(1).max(10),
   caseStrengths: z.array(z.string()).min(1),
   caseWeaknesses: z.array(z.string()).min(1),
+  missingInformation: z.array(z.string()).describe("Documents, evidence, or key details not yet collected that the attorney will need — e.g. 'Police report number', 'Medical records from treating physicians', 'Photos from the accident scene'. Empty array if nothing is missing."),
   recommendation: z.string().describe("1-2 sentence recommendation for the attorney"),
 });
 

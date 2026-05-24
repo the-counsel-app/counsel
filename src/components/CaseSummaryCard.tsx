@@ -5,6 +5,7 @@ interface CaseSummary {
   credibilityRating: number;
   caseStrengths: string[];
   caseWeaknesses: string[];
+  missingInformation: string[];
   recommendation: string;
 }
 
@@ -112,6 +113,23 @@ export default function CaseSummaryCard({ summary }: CaseSummaryCardProps) {
           </ul>
         </div>
       </div>
+
+      {/* Missing Information */}
+      {summary.missingInformation.length > 0 && (
+        <div className="bg-navy-light rounded-xl p-5 border border-amber-700/40">
+          <h3 className="text-xs font-semibold text-amber-400 uppercase tracking-widest mb-3">
+            Documents &amp; Information Still Needed
+          </h3>
+          <ul className="space-y-1.5">
+            {summary.missingInformation.map((item, i) => (
+              <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
+                <span className="text-amber-400 mt-0.5 shrink-0">○</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Recommendation */}
       <div className="bg-gold/10 rounded-xl p-5 border border-gold/25">

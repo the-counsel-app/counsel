@@ -11,6 +11,7 @@ interface CaseSummary {
   credibilityRating: number;
   caseStrengths: string[];
   caseWeaknesses: string[];
+  missingInformation: string[];
   recommendation: string;
 }
 
