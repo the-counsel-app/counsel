@@ -74,27 +74,8 @@ export default function SummaryPage() {
 
       <CaseSummaryCard summary={summary} />
 
-      {caseUrl && caseId ? (
+      {caseUrl && caseId && (
         <NotifyButton caseId={caseId} summary={summary} caseUrl={caseUrl} />
-      ) : (
-        <div className="mt-8 flex flex-col sm:flex-row gap-3 items-center">
-          <Link
-            href="/referral"
-            className="inline-flex items-center gap-2 px-7 py-3.5 bg-gold hover:bg-gold-light text-navy font-bold rounded-xl text-sm transition-colors"
-          >
-            Find an Attorney
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </Link>
-          <Link href="/chat" className="text-slate-500 hover:text-slate-300 text-sm transition-colors">
-            ← Start over
-          </Link>
-        </div>
       )}
     </main>
   );
