@@ -62,6 +62,7 @@ Typing `gen fake report` in the chat input replaces the conversation with a pre-
 
 Co-founder docs live in `docs/`:
 - `docs/strategy.txt` — marketplace vs. firm-embedded SaaS decision; narrow focus (NYC, plaintiff, car accidents); pilot structure
+- `docs/lead_gen.txt` — full lead generation strategy: channel priority, 90-day plan, what to avoid
 - `docs/risks.txt` — legal risks: privilege claim, UPL, referral fee prohibition, data security
 - `docs/ideas.txt` — product feature ideas: case packet, evidence collection, voice input, deposition prep
 - `docs/todo.txt` — prioritized next steps (co-founder attorney question is #1; legal ethics opinion is #3)

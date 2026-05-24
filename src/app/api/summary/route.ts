@@ -1,10 +1,13 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { generateObject, type ModelMessage } from "ai";
 import { z } from "zod";
+import { Redis } from "@upstash/redis";
+import { randomUUID } from "crypto";
 
 export const maxDuration = 60;
 
 const summarySchema = z.object({
+  qualifyingSignal: z.string().describe("One-line email subject — injury type, key facts, most important signal for the attorney. E.g. 'Rear-end collision, neck/shoulder injuries, ER visit, no prior claims, police report filed'"),
   incidentSummary: z.string().describe("2-3 sentence summary of what happened"),
   injuriesClaimed: z.array(z.string()).min(1).describe("List each injury mentioned"),
   liabilityExposure: z.enum(["Low", "Medium", "High"]),
@@ -16,6 +19,13 @@ const summarySchema = z.object({
 });
 
 const SUMMARY_SYSTEM = `You are a legal case analyst reviewing a personal injury intake conversation. Analyze the conversation and provide a structured case evaluation.`;
+
+function getRedis() {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) return null;
+  return new Redis({ url, token });
+}
 
 export async function POST(req: Request) {
   let messages: ModelMessage[];
@@ -43,12 +53,23 @@ export async function POST(req: Request) {
       schema: summarySchema,
       maxOutputTokens: 1024,
     });
-    return Response.json(object);
+
+    const caseId = randomUUID();
+    const redis = getRedis();
+    if (redis) {
+      try {
+        await redis.set(`case:${caseId}`, object, { ex: 60 * 60 * 24 * 30 });
+      } catch (e) {
+        console.error("Redis save failed:", e);
+      }
+    }
+
+    return Response.json({ ...object, caseId });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error("Summary generation failed:", message);
     return Response.json(
-      { error: `Failed to generate summary. Please try again.` },
+      { error: "Failed to generate summary. Please try again." },
       { status: 500 }
     );
   }

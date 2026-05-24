@@ -171,6 +171,7 @@ export default function ChatInterface() {
       const data = await res.json();
       if (!res.ok || data.error) throw new Error(data.error ?? `HTTP ${res.status}`);
       sessionStorage.setItem("caseSummary", JSON.stringify(data));
+      if (data.caseId) sessionStorage.setItem("caseId", data.caseId);
       router.push("/summary");
     } catch (err) {
       setCtaError(err instanceof Error ? err.message : "Unknown error");

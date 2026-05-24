@@ -1,13 +1,4 @@
-interface CaseSummary {
-  incidentSummary: string;
-  injuriesClaimed: string[];
-  liabilityExposure: "Low" | "Medium" | "High";
-  credibilityRating: number;
-  caseStrengths: string[];
-  caseWeaknesses: string[];
-  missingInformation: string[];
-  recommendation: string;
-}
+import type { CaseSummary } from "@/lib/types";
 
 interface CaseSummaryCardProps {
   summary: CaseSummary;
