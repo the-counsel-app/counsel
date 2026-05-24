@@ -81,7 +81,7 @@ export default function ChatInterface() {
     e.preventDefault();
     if (!input.trim() || isStreaming || intakeComplete) return;
 
-    if (input.trim().toLowerCase() === "gen fake report") {
+    if (input.trim().toLowerCase() === "fake report") {
       setInput("");
       setMessages(FAKE_CONVERSATION);
       return;

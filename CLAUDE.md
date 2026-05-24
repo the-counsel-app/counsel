@@ -56,7 +56,7 @@ Do not replace this with `useChat`.
 
 ## Demo shortcut
 
-Typing `gen fake report` in the chat input replaces the conversation with a pre-scripted fake case (rear-end accident on I-90, $18k bills, possible shoulder surgery) to demo the full flow without running a real AI conversation.
+Typing `fake report` in the chat input replaces the conversation with a pre-scripted fake case (rear-end accident on I-90, $18k bills, possible shoulder surgery) to demo the full flow without running a real AI conversation.
 
 ## Business context
 
